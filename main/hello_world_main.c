@@ -12,6 +12,7 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
+#include "ssd1306.h"
 
 #ifdef CONFIG_IDF_TARGET_ESP32
 #define CHIP_NAME "ESP32"
@@ -29,6 +30,12 @@ void app_main(void)
     esp_chip_info_t chip_info;
     esp_chip_info(&chip_info);
 
+    ssd1306_setFixedFont(ssd1306xled_font6x8);
+    ssd1306_128x64_i2c_init();
+    ssd1306_clearScreen();
+
+    char textChar[36];
+
     while (true)
     {
                 printf("This is %s chip with %d CPU cores, WiFi%s%s, ",
@@ -42,14 +49,14 @@ void app_main(void)
         printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
                 (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
-        for (int i = 10; i >= 0; i--) {
-            printf("Restarting in %d seconds...\n", i);
-            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        for (int i = 1000; i >= 0; i--) {
+            sprintf(textChar, "Restarting in %d seconds...", i);
+            printf(textChar);
+            //ssd1306_clearScreen();
+            ssd1306_printFixed(0,  8, textChar, STYLE_NORMAL);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
             fflush(stdout);
         }
         printf("Restarting now.\n");
     }
-    
-
-
 }
