@@ -17,8 +17,10 @@
 #include "driver/gpio.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
-#include "ssd1306.h"
-#include "mygpio.c"
+//#include "ssd1306.h"
+#include "lcdgfx.h"
+#include "lcdgfx_gui.h"
+//#include "mygpio.c"
 
 #ifdef CONFIG_IDF_TARGET_ESP32
 #define CHIP_NAME "ESP32"
@@ -35,7 +37,7 @@
 
 
 
-void app_main(void)
+extern "C" void app_main(void)
 {
     printf("Hello world!\n");
 
@@ -48,9 +50,14 @@ void app_main(void)
     char textChar[36];
     esp_err_t errorVar;
 
-    mygpio_init();
+    //mygpio_init();
 
-
+    DisplaySSD1306_128x64_I2C display(-1);
+    //DisplaySSD1306_128x64_SPI display(22,{-1, 5, 21, 0,-1,-1}); // Use this line for ESP32 (VSPI)  (gpio22=RST, gpio5=CE for VSPI, gpio21=D/C)
+    display.begin();
+    display.setFixedFont(ssd1306xled_font8x16);
+    display.clear();
+    display.printFixed(0,8,"hello world");
 
 //using the RTC_gpio (rtc_gpio10)
 

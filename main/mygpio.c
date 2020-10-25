@@ -9,7 +9,7 @@
 #include "driver/gpio.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
-#include "ssd1306.h"
+//#include "ssd1306.h"
 
 static int debounceBool[24];
 static xQueueHandle gpio_evt_queue = NULL;
@@ -38,7 +38,7 @@ static void gpio_task_example(void* arg)
                 sprintf(textChar, "E : GPIO[%d] = %d", io_num, gpio_get_level(io_num));
 
                 
-                ssd1306_printFixed(0,  36, textChar, FONT_SIZE_NORMAL);
+                //ssd1306_printFixed(0,  36, textChar, FONT_SIZE_NORMAL);
             }
         }
     }
