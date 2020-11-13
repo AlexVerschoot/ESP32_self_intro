@@ -17,9 +17,9 @@
 #include "driver/gpio.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
-//#include "ssd1306.h"
 #include "lcdgfx.h"
 #include "lcdgfx_gui.h"
+#include "myGpioController.h"
 //#include "mygpio.c"
 
 #ifdef CONFIG_IDF_TARGET_ESP32
@@ -57,13 +57,19 @@ extern "C" void app_main(void)
     display.begin();
     display.setFixedFont(ssd1306xled_font8x16);
     display.clear();
-    display.printFixed(0,8,"hello world");
+    display.printFixed(16,8,"hello world");
+
+    MyGpioController mygpio(&display);
 
 //using the RTC_gpio (rtc_gpio10)
 
+    //suspend ourselves, the rest is up to other functions
+    vTaskSuspend( NULL );
+
     while (true)
     {
-                printf("This is %s chip with %d CPU cores, WiFi%s%s, ",
+
+        /*printf("This is %s chip with %d CPU cores, WiFi%s%s, ",
                 CHIP_NAME,
                 chip_info.cores,
                 (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
@@ -83,5 +89,6 @@ extern "C" void app_main(void)
             fflush(stdout);
         }
         printf("Restarting now.\n");
+        */
     }
 }
